@@ -45,6 +45,7 @@ private extension MainViewController {
     func setupChildViewController() {
         addChild(pageViewController)
         
+        pageViewController.view.translatesAutoresizingMaskIntoConstraints = false
         mainView.pageContainerView.addSubview(pageViewController.view)
         
         NSLayoutConstraint.activate([

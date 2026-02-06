@@ -19,14 +19,25 @@ final class MainView: UIView {
         return view
     }()
     
+    private let likeButtonBGView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .primaryGray
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.layer.cornerRadius = 32
+        
+        return view
+    }()
+    
     private let likeButton: UIButton = {
         let button = UIButton()
-        var config = UIButton.Configuration.plain()
-        config.image = UIImage(named: "heart")
-        config.baseForegroundColor = .white
-        
-        button.configuration = config
+        button.setImage(.heartFilled.withRenderingMode(.alwaysOriginal), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
+        
+        // 이미지 뷰가 버튼 크기에 맞춰지도록 설정
+        button.imageView?.contentMode = .scaleAspectFit
+        
+        // 버튼 내부에 적절한 여백 주기 (40x40 내에서 이미지가 꽉 차지 않게)
+        button.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
         
         return button
     }()
@@ -56,14 +67,16 @@ private extension MainView {
     
     // MARK: - setHierarchy
     func setHierarchy() {
-        [pageContainerView, likeButton].forEach {
+        [pageContainerView, likeButtonBGView].forEach {
             addSubview($0)
         }
+        
+        likeButtonBGView.addSubview(likeButton)
     }
     
     // MARK: - setStyles
     func setStyles() {
-        backgroundColor = .white
+        backgroundColor = .primaryBackground
     }
     
     // MARK: - setConstraints
@@ -71,10 +84,19 @@ private extension MainView {
         NSLayoutConstraint.activate([
             pageContainerView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             pageContainerView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            pageContainerView.topAnchor.constraint(equalTo: self.topAnchor, constant: 100),
-            pageContainerView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -60),
+            pageContainerView.topAnchor.constraint(equalTo: self.topAnchor),
+            pageContainerView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -60),
             
             // TODO: - like button constraints
+            likeButtonBGView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -32),
+            likeButtonBGView.bottomAnchor.constraint(equalTo: pageContainerView.bottomAnchor, constant: 4),
+            likeButtonBGView.widthAnchor.constraint(equalToConstant: 64),
+            likeButtonBGView.heightAnchor.constraint(equalToConstant: 64),
+            
+            likeButton.centerXAnchor.constraint(equalTo: likeButtonBGView.centerXAnchor),
+            likeButton.centerYAnchor.constraint(equalTo: likeButtonBGView.centerYAnchor, constant: 2),
+            likeButton.widthAnchor.constraint(equalToConstant: 66),
+            likeButton.heightAnchor.constraint(equalToConstant: 66),
         ])
     }
 }
