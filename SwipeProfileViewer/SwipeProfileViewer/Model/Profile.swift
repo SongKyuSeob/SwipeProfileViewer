@@ -10,8 +10,7 @@ import Foundation
 struct Profile {
     let id: Int
     let name: String
-    let age: Int
     let bio: String
-    let distance: Int
+    let keywords: [String]
     let images: [String]
 }
