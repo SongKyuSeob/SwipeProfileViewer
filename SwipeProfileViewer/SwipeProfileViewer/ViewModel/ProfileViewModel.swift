@@ -11,7 +11,8 @@ import Combine
 final class ProfileViewModel {
     // MARK: - Properties
     private var cancellables = Set<AnyCancellable>()
-    private(set) let profile: Profile
+    let profile: Profile
+    private let currentIndex = CurrentValueSubject<Int, Never>(0)
     
     // MARK: - Initializer
     init(profile: Profile) {
@@ -20,15 +21,36 @@ final class ProfileViewModel {
     
     // MARK: - Input, Output
     struct Input {
-        
+        let leftTapped: AnyPublisher<Void, Never>
+        let rightTapped: AnyPublisher<Void, Never>
     }
     
     struct Output {
-        
+        let currentIndex: AnyPublisher<Int, Never>
     }
     
     // MARK: - transform
     func transform(_ input: Input) -> Output {
-        return Output()
+        input.leftTapped
+            .sink { [weak self] in
+                guard let self else { return }
+                let newIndex = currentIndex.value - 1
+                guard newIndex >= 0 else { return }
+                currentIndex.send(newIndex)
+            }
+            .store(in: &cancellables)
+        
+        input.rightTapped
+            .sink { [weak self] in
+                guard let self else { return }
+                let newIndex = currentIndex.value + 1
+                guard newIndex < profile.images.count else { return }
+                currentIndex.send(newIndex)
+            }
+            .store(in: &cancellables)
+        
+        return Output(
+            currentIndex: currentIndex.eraseToAnyPublisher()
+        )
     }
 }

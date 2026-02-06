@@ -13,9 +13,7 @@ class ProfileViewController: UIViewController {
     private let viewModel: ProfileViewModel
     private let profileView = ProfileView()
     private var cancellables = Set<AnyCancellable>()
-    private(set) lazy var id = {
-        return viewModel.profile.id
-    }()
+    lazy var id = viewModel.profile.id
     
     // MARK: - loadView
     override func loadView() {
@@ -42,25 +40,27 @@ class ProfileViewController: UIViewController {
 
 private extension ProfileViewController {
     func configure() {
-        setHierarchy()
-        setStyles()
-        setConstraints()
         setBindings()
+        setInitialValues()
     }
     
-    func setHierarchy() {
-        
-    }
-    
-    func setStyles() {
-        
-    }
-    
-    func setConstraints() {
-        
+    func setInitialValues() {
+        profileView.update(with: viewModel.profile)
     }
     
     func setBindings() {
+        let input = ProfileViewModel.Input(
+            leftTapped: profileView.leftTapped,
+            rightTapped: profileView.rightTapped
+        )
+        let output = viewModel.transform(input)
         
+        output.currentIndex
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] index in
+                guard let self else { return }
+                profileView.displayImage(at: index)
+            }
+            .store(in: &cancellables)
     }
 }
