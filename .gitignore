@@ -44,6 +44,5 @@ fastlane/test_output
 *.xccheckout
 *.xcscmblueprint
 
-# Profile images (local only)
-**/Assets.xcassets/Profiles.imageset/*.{png,jpg,jpeg}
-
+# Profile images
+SwipeProfileViewer/SwipeProfileViewer/Resource/Assets.xcassets/Profiles
