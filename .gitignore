@@ -43,3 +43,7 @@ fastlane/test_output
 # --- Other ---
 *.xccheckout
 *.xcscmblueprint
+
+# Profile images (local only)
+**/Assets.xcassets/Profiles.imageset/*.{png,jpg,jpeg}
+
