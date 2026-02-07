@@ -34,6 +34,13 @@ final class ProfileView: UIView {
         return imageView
     }()
     
+    private let gradientView: GradientOverlayView = {
+        let view = GradientOverlayView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }()
+    
     private let leftTapButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .clear
@@ -57,6 +64,33 @@ final class ProfileView: UIView {
         stackView.distribution = .fillEqually
         
         return stackView
+    }()
+    
+    private let nameLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = .primaryWhite
+        label.font = .systemFont(ofSize: 28, weight: .bold)
+        
+        return label
+    }()
+    
+    private let keywordStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .horizontal
+        stackView.spacing = 6
+        
+        return stackView
+    }()
+    
+    private let bioLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = .primaryWhite
+        label.font = .systemFont(ofSize: 20, weight: .regular)
+        
+        return label
     }()
     
     // MARK: - Initializer
@@ -84,7 +118,9 @@ final class ProfileView: UIView {
             displayImage(at: 0)
         }
         
-        
+        nameLabel.text = profile.name
+        setupKeywords(keywords: profile.keywords)
+        bioLabel.text = "\"\(profile.bio)\""
     }
     
     func displayImage(at index: Int) {
@@ -131,6 +167,18 @@ final class ProfileView: UIView {
             : .white
         }
     }
+    
+    private func setupKeywords(keywords: [String]) {
+        keywordStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        
+        keywords.forEach {
+            let keywordChip = ChipView(title: $0)
+            keywordChip.translatesAutoresizingMaskIntoConstraints = false
+            keywordStackView.addArrangedSubview(keywordChip)
+        }
+        
+        layoutIfNeeded()
+    }
 }
 
 private extension ProfileView {
@@ -144,7 +192,16 @@ private extension ProfileView {
     // MARK: - setHierarchy
     func setHierarchy() {
         [containerView, topIndicator].forEach { addSubview($0) }
-        [profileImageView, leftTapButton, rightTapButton].forEach { containerView.addSubview($0)
+        [
+            profileImageView,
+            gradientView,
+            nameLabel,
+            keywordStackView,
+            bioLabel,
+            leftTapButton,
+            rightTapButton
+        ].forEach {
+            containerView.addSubview($0)
         }
     }
     
@@ -166,19 +223,36 @@ private extension ProfileView {
             containerView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             containerView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
             
-            profileImageView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 40),
+            profileImageView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -76),
             profileImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
             profileImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
             
-            leftTapButton.topAnchor.constraint(equalTo: profileImageView.topAnchor),
-            leftTapButton.leadingAnchor.constraint(equalTo: profileImageView.leadingAnchor),
-            leftTapButton.bottomAnchor.constraint(equalTo: profileImageView.bottomAnchor),
-            leftTapButton.widthAnchor.constraint(equalTo: profileImageView.widthAnchor, multiplier: 0.5),
+            gradientView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+            gradientView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            gradientView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            gradientView.heightAnchor.constraint(equalTo: containerView.heightAnchor, multiplier: 0.3),
             
-            rightTapButton.topAnchor.constraint(equalTo: profileImageView.topAnchor),
-            rightTapButton.trailingAnchor.constraint(equalTo: profileImageView.trailingAnchor),
-            rightTapButton.bottomAnchor.constraint(equalTo: profileImageView.bottomAnchor),
-            rightTapButton.widthAnchor.constraint(equalTo: profileImageView.widthAnchor, multiplier: 0.5),
+            bioLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -40),
+            bioLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 28),
+            bioLabel.trailingAnchor.constraint(lessThanOrEqualTo: containerView.trailingAnchor, constant: -140),
+            
+            keywordStackView.bottomAnchor.constraint(equalTo: bioLabel.topAnchor, constant: -20),
+            keywordStackView.leadingAnchor.constraint(equalTo: bioLabel.leadingAnchor),
+            keywordStackView.trailingAnchor.constraint(lessThanOrEqualTo: containerView.trailingAnchor, constant: -40),
+            
+            nameLabel.bottomAnchor.constraint(equalTo: keywordStackView.topAnchor, constant: -20),
+            nameLabel.leadingAnchor.constraint(equalTo: bioLabel.leadingAnchor),
+            nameLabel.trailingAnchor.constraint(lessThanOrEqualTo: containerView.trailingAnchor, constant: -40),
+            
+            leftTapButton.topAnchor.constraint(equalTo: containerView.topAnchor),
+            leftTapButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            leftTapButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+            leftTapButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.5),
+            
+            rightTapButton.topAnchor.constraint(equalTo: containerView.topAnchor),
+            rightTapButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            rightTapButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+            rightTapButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.5),
         ])
     }
 }

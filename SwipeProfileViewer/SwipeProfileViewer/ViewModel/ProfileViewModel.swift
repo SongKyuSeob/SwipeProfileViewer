@@ -21,6 +21,7 @@ final class ProfileViewModel {
     
     // MARK: - Input, Output
     struct Input {
+        let viewWillAppear: AnyPublisher<Void, Never>
         let leftTapped: AnyPublisher<Void, Never>
         let rightTapped: AnyPublisher<Void, Never>
     }
@@ -46,6 +47,13 @@ final class ProfileViewModel {
                 let newIndex = currentIndex.value + 1
                 guard newIndex < profile.images.count else { return }
                 currentIndex.send(newIndex)
+            }
+            .store(in: &cancellables)
+        
+        input.viewWillAppear
+            .sink { [weak self] in
+                guard let self else { return }
+                currentIndex.send(0)
             }
             .store(in: &cancellables)
         

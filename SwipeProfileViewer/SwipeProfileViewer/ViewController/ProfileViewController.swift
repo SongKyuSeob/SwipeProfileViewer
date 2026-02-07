@@ -15,6 +15,8 @@ class ProfileViewController: UIViewController {
     private var cancellables = Set<AnyCancellable>()
     lazy var id = viewModel.profile.id
     
+    private let viewWillAppearSubject = PassthroughSubject<Void, Never>()
+    
     // MARK: - loadView
     override func loadView() {
         self.view = profileView
@@ -36,6 +38,12 @@ class ProfileViewController: UIViewController {
         
         configure()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        
+    }
 }
 
 private extension ProfileViewController {
@@ -50,6 +58,7 @@ private extension ProfileViewController {
     
     func setBindings() {
         let input = ProfileViewModel.Input(
+            viewWillAppear: viewWillAppearSubject.eraseToAnyPublisher(),
             leftTapped: profileView.leftTapped,
             rightTapped: profileView.rightTapped
         )

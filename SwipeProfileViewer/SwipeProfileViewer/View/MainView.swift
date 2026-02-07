@@ -23,7 +23,7 @@ final class MainView: UIView {
         let view = UIView()
         view.backgroundColor = .primaryGray
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.cornerRadius = 32
+        view.layer.cornerRadius = 28
         
         return view
     }()
@@ -90,13 +90,13 @@ private extension MainView {
             // TODO: - like button constraints
             likeButtonBGView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -32),
             likeButtonBGView.bottomAnchor.constraint(equalTo: pageContainerView.bottomAnchor, constant: 4),
-            likeButtonBGView.widthAnchor.constraint(equalToConstant: 64),
-            likeButtonBGView.heightAnchor.constraint(equalToConstant: 64),
+            likeButtonBGView.widthAnchor.constraint(equalToConstant: 56),
+            likeButtonBGView.heightAnchor.constraint(equalToConstant: 56),
             
             likeButton.centerXAnchor.constraint(equalTo: likeButtonBGView.centerXAnchor),
             likeButton.centerYAnchor.constraint(equalTo: likeButtonBGView.centerYAnchor, constant: 2),
-            likeButton.widthAnchor.constraint(equalToConstant: 66),
-            likeButton.heightAnchor.constraint(equalToConstant: 66),
+            likeButton.widthAnchor.constraint(equalToConstant: 56),
+            likeButton.heightAnchor.constraint(equalToConstant: 56),
         ])
     }
 }

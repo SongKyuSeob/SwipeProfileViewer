@@ -35,6 +35,7 @@ class ProfilePageViewController: UIPageViewController {
 
 private extension ProfilePageViewController {
     func configure() {
+        setDataSource()
         setInitialPage()
     }
     
