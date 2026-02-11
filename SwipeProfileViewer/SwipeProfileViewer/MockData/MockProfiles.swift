@@ -10,6 +10,13 @@ import Foundation
 struct MockProfiles {
     static let profiles = [
         Profile(
+            id: 0,
+            name: "Seoul",
+            bio: " Just do it ",
+            keywords: ["편한만남", "러닝"],
+            images: ["profile_0_1", "profile_0_2"]
+        ),
+        Profile(
             id: 1,
             name: "우디",
             bio: " 주말에 뭐해요? :-) ",
